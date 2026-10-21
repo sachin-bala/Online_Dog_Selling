@@ -250,10 +250,12 @@ export const Navbar: React.FC = () => {
                 </div>
               </div>
               <span
-                className="text-[9px] sm:text-[10px] font-bold tracking-[0.18em] mt-0.5 ml-1"
+                className="text-[9px] sm:text-[10px] font-bold tracking-[0.16em] mt-0.5 ml-1 flex items-center gap-1.5"
                 style={{ color: '#F5901A', fontFamily: "'Plus Jakarta Sans',sans-serif", textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}
               >
-                Verified Pet Marketplace
+                <span className="text-[#FFD700] font-black tracking-wider">TAMIL KENNEL</span>
+                <span className="opacity-50 text-[#FFD700]">•</span>
+                <span className="text-[#FFF5E0]/90">Verified Pets</span>
               </span>
             </button>
 
@@ -685,6 +687,53 @@ export const Navbar: React.FC = () => {
         <div className="heritage-bottom-stripe w-full" />
       </div>
 
+      {/* ── MOBILE HERITAGE BANNER: TAMIL KENNEL (Visible on all mobile & tablet screens) ── */}
+      <div
+        className="md:hidden relative w-full px-3 py-2 flex items-center justify-between overflow-hidden shadow-lg select-none"
+        style={{
+          background: 'linear-gradient(135deg, #240000 0%, #4A0505 50%, #240000 100%)',
+          borderTop: '1px solid rgba(255,215,0,0.25)',
+          borderBottom: '2px solid #D4500A',
+        }}
+      >
+        {/* Left lotus accent */}
+        <div className="flex items-center gap-1 shrink-0">
+          <LotusIcon className="w-3.5 h-3.5" style={{ color: '#FFD700' }} />
+          <div className="h-[1.5px] w-4 sm:w-8" style={{ background: 'linear-gradient(90deg, transparent, #FFD700)' }} />
+        </div>
+
+        {/* Center: Tamil Kennel Title & Subtitle */}
+        <div className="flex flex-col items-center text-center px-1">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <PawIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" style={{ color: '#F5901A' }} />
+            <h2
+              className="font-heritage font-black tracking-[0.14em] text-sm sm:text-base leading-tight heritage-title-glow"
+              style={{
+                color: '#FFF5E0',
+                textShadow: '0 0 16px rgba(255,215,0,0.6), 0 2px 4px rgba(0,0,0,0.9)'
+              }}
+            >
+              TAMIL KENNEL
+            </h2>
+            <PawIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" style={{ color: '#F5901A' }} />
+          </div>
+          <div className="flex items-center gap-1.5 mt-0.5">
+            <span
+              className="font-cinzel text-[7.5px] sm:text-[8.5px] tracking-[0.22em] font-bold"
+              style={{ color: '#FFD700' }}
+            >
+              VERIFIED PET MARKETPLACE
+            </span>
+          </div>
+        </div>
+
+        {/* Right lotus accent */}
+        <div className="flex items-center gap-1 shrink-0">
+          <div className="h-[1.5px] w-4 sm:w-8" style={{ background: 'linear-gradient(90deg, #FFD700, transparent)' }} />
+          <LotusIcon className="w-3.5 h-3.5" style={{ color: '#FFD700' }} />
+        </div>
+      </div>
+
       {/* ═══ LEVEL 2 — NAVIGATION BAR ═══════════════════════════ */}
       <nav
         className="heritage-nav-bg relative hidden md:block"
@@ -826,22 +875,37 @@ export const Navbar: React.FC = () => {
               borderLeft: '3px solid #D4500A'
             }}
           >
-            {/* Drawer header */}
+            {/* Drawer header with prominent Tamil Kennel branding */}
             <div
-              className="flex items-center justify-between px-4 py-3 border-b"
+              className="flex items-center justify-between px-4 py-3.5 border-b"
               style={{ borderColor: '#D4500A', background: 'linear-gradient(90deg,#4A0505,#7B0D0D)' }}
             >
-              <div className="flex items-center gap-2">
-                <PawIcon className="w-7 h-7" style={{ color: '#FFD700' }} />
+              <div className="flex items-center gap-2.5">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-lg"
+                  style={{
+                    background: 'linear-gradient(135deg,#2A0000,#4A0505)',
+                    border: '1.5px solid #FFD700',
+                    boxShadow: '0 0 10px rgba(255,215,0,0.3)'
+                  }}
+                >
+                  <PawIcon className="w-5 h-5" style={{ color: '#FFD700' }} />
+                </div>
                 <div>
-                  <div className="font-cinzel text-sm font-black" style={{ color: '#FFF5E0', letterSpacing: '0.08em' }}>PAWVERSE AI</div>
-                  <div className="text-[9px] tracking-[0.2em] font-bold" style={{ color: '#F5901A' }}>TAMIL KENNEL</div>
+                  <div className="font-heritage text-base font-black tracking-wider leading-tight" style={{ color: '#FFF5E0', textShadow: '0 0 10px rgba(255,215,0,0.5)' }}>
+                    TAMIL KENNEL
+                  </div>
+                  <div className="text-[8.5px] tracking-[0.18em] font-bold mt-0.5 flex items-center gap-1" style={{ color: '#F5901A' }}>
+                    <span>PAWVERSE AI</span>
+                    <span className="opacity-50">•</span>
+                    <span className="text-[#FFD700]">VERIFIED</span>
+                  </div>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}
-                className="p-1.5 rounded border cursor-pointer"
+                className="p-1.5 rounded border cursor-pointer hover:bg-white/10 transition-colors"
                 style={{ borderColor: '#D4500A', color: '#FFD700' }}
                 aria-label="Close menu"
               >

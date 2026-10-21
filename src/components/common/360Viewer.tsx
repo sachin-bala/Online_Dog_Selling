@@ -49,6 +49,30 @@ export const Viewer360: React.FC<Viewer360Props> = ({ frames, dogName }) => {
     setIsDragging(false);
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      setIsDragging(true);
+      dragStartX.current = e.touches[0].clientX;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging || e.touches.length !== 1) return;
+    const deltaX = e.touches[0].clientX - dragStartX.current;
+    if (Math.abs(deltaX) > 15) {
+      if (deltaX > 0) {
+        setCurrentFrameIndex(prev => (prev + 1) % totalFrames);
+      } else {
+        setCurrentFrameIndex(prev => (prev - 1 + totalFrames) % totalFrames);
+      }
+      dragStartX.current = e.touches[0].clientX;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
   const angleDegree = Math.round((currentFrameIndex / totalFrames) * 360);
 
   return (
@@ -70,18 +94,22 @@ export const Viewer360: React.FC<Viewer360Props> = ({ frames, dogName }) => {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
-        className="absolute inset-0 flex items-center justify-center cursor-grab active:cursor-grabbing p-8"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
+        className="absolute inset-0 flex items-center justify-center cursor-grab active:cursor-grabbing p-4 sm:p-8 touch-pan-y"
       >
         <img
           src={frames[currentFrameIndex] || frames[0]}
           alt={`${dogName} 360 View Frame ${currentFrameIndex}`}
-          className="max-h-full max-w-full object-contain rounded-2xl drop-shadow-md transition-all duration-150 transform group-hover:scale-105"
+          className="max-h-full max-w-full object-contain rounded-2xl drop-shadow-md transition-all duration-150 transform group-hover:scale-105 pointer-events-none select-none"
         />
 
         {/* Drag Guidance Banner */}
-        <div className="absolute bottom-16 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-[#E8DED3] text-[#5B3A29] text-xs flex items-center space-x-2 pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity shadow-xs">
-          <MoveHorizontal className="w-4 h-4 text-[#2F7D68] animate-pulse" />
-          <span>Drag left or right to inspect 360° posture</span>
+        <div className="absolute bottom-14 sm:bottom-16 bg-white/95 backdrop-blur-md px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border border-[#E8DED3] text-[#5B3A29] text-[10px] sm:text-xs flex items-center space-x-1.5 sm:space-x-2 pointer-events-none opacity-85 group-hover:opacity-100 transition-opacity shadow-xs">
+          <MoveHorizontal className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#2F7D68] animate-pulse" />
+          <span>Swipe or drag to inspect 360° posture</span>
         </div>
       </div>
 
