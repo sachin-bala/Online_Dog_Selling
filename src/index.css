@@ -1,0 +1,1066 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-black: #0A0A0A;
+  --color-primary-black-dark: #000000;
+  --color-primary-black-light: #18181B;
+  --color-primary-black-subtle: #27272A;
+
+  --color-vibrant-yellow: #FACC15;
+  --color-vibrant-yellow-dark: #EAB308;
+  --color-vibrant-yellow-light: #FEF08A;
+  --color-vibrant-yellow-subtle: #FEF9C3;
+
+  /* Aliases for seamless design transition */
+  --color-primary-brown: #0A0A0A;
+  --color-primary-brown-dark: #000000;
+  --color-primary-brown-light: #18181B;
+  --color-primary-brown-subtle: #FEF9C3;
+
+  --color-warm-gold: #FACC15;
+  --color-warm-gold-dark: #EAB308;
+  --color-warm-gold-light: #FEF9C3;
+
+  --color-natural-green: #EAB308;
+  --color-natural-green-dark: #CA8A04;
+  --color-natural-green-light: #FEF9C3;
+
+  --color-warm-cream: #FAFAFA;
+  --color-warm-cream-subtle: #F4F4F5;
+
+  --color-charcoal: #0A0A0A;
+  --color-charcoal-light: #27272A;
+  --color-text-gray: #71717A;
+  --color-text-light: #A1A1AA;
+
+  --color-border-warm: #E4E4E7;
+  --color-border-subtle: #F4F4F5;
+
+  --color-success-green: #10B981;
+  --color-success-light: #ECFDF5;
+
+  --color-danger-red: #EF4444;
+  --color-danger-light: #FEF2F2;
+}
+
+:root {
+  /* Yellow & Black Design Tokens */
+  --color-primary: #0A0A0A;
+  --color-primary-hover: #18181B;
+  --color-yellow: #FACC15;
+  --color-yellow-hover: #EAB308;
+  --color-gold: #FACC15;
+  --color-gold-hover: #EAB308;
+  --color-green: #EAB308;
+  --color-green-hover: #CA8A04;
+  --color-bg: #FEFCE8;
+  --color-surface: #FEF9C3;
+  --color-charcoal: #0A0A0A;
+  --color-gray: #713F12;
+  --color-border: #FDE047;
+  --color-success: #10B981;
+  --color-danger: #EF4444;
+
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+  --shadow-hover-elevated: 0 20px 35px -6px rgba(0, 0, 0, 0.18), 0 0 25px rgba(250, 204, 21, 0.25);
+}
+
+.dark {
+  --color-bg: #FEFCE8;
+  --color-surface: #FEF9C3;
+  --color-charcoal: #0A0A0A;
+  --color-gray: #713F12;
+  --color-border: #FDE047;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-charcoal);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Heading Typography */
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
+  color: inherit;
+}
+
+/* High Voltage Selection Color */
+::selection {
+  background-color: #FACC15;
+  color: #000000;
+}
+
+/* Premium Marketplace Dog Card */
+.pet-card {
+  background-color: #FEF9C3;
+  border: 1px solid #FDE047;
+  border-radius: 1.25rem;
+  box-shadow: var(--shadow-subtle);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark .pet-card {
+  background-color: #FEF9C3;
+  border-color: #FDE047;
+}
+
+.pet-card:hover {
+  border-color: #FACC15;
+  box-shadow: var(--shadow-hover-elevated);
+  transform: translateY(-4px);
+}
+
+/* Glass & Surface Helpers */
+.glass-panel {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+}
+
+.dark .glass-panel {
+  background-color: #FEF9C3;
+  border-color: #FDE047;
+}
+
+.glass-card {
+  background-color: #FEF9C3;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-subtle);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark .glass-card {
+  background-color: #FEF9C3;
+  border-color: #FDE047;
+}
+
+.glass-card:hover {
+  border-color: #FACC15;
+  box-shadow: var(--shadow-card);
+  transform: translateY(-2px);
+}
+
+/* Standardized Yellow & Black Button System */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 800;
+  border-radius: 0.75rem;
+  background-color: #FACC15;
+  color: #0A0A0A;
+  box-shadow: 0 4px 14px rgba(250, 204, 21, 0.35);
+  border: 1px solid #EAB308;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #EAB308;
+  color: #000000;
+  box-shadow: 0 6px 20px rgba(250, 204, 21, 0.5);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 800;
+  border-radius: 0.75rem;
+  background-color: #0A0A0A;
+  color: #FACC15;
+  border: 1px solid #27272A;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: #18181B;
+  color: #FDE047;
+  border-color: #FACC15;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.35rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  background-color: #FFFFFF;
+  color: #0A0A0A;
+  border: 1.5px solid #0A0A0A;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.dark .btn-outline {
+  background-color: #FEF9C3;
+  color: #0A0A0A;
+  border-color: #0A0A0A;
+}
+
+.btn-outline:hover {
+  background-color: #FEF9C3;
+  border-color: #FACC15;
+  color: #0A0A0A;
+  transform: translateY(-1px);
+}
+
+.btn-gold, .btn-yellow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.4rem;
+  font-size: 0.875rem;
+  font-weight: 800;
+  border-radius: 0.75rem;
+  background-color: #FACC15;
+  color: #0A0A0A;
+  box-shadow: 0 4px 14px rgba(250, 204, 21, 0.35);
+  border: 1px solid #EAB308;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-gold:hover, .btn-yellow:hover {
+  background-color: #EAB308;
+  color: #0A0A0A;
+  transform: translateY(-1px);
+}
+
+.btn-black {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.4rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  background-color: #0A0A0A;
+  color: #FFFFFF;
+  border: 1px solid #27272A;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-black:hover {
+  background-color: #18181B;
+  color: #FACC15;
+  border-color: #FACC15;
+  transform: translateY(-1px);
+}
+
+.btn-danger, .btn-red {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  background-color: #EF4444;
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.25);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-danger:hover, .btn-red:hover {
+  background-color: #DC2626;
+  transform: translateY(-1px);
+}
+
+/* Badges */
+.badge-gold, .badge-yellow {
+  background-color: #FEF9C3;
+  color: #713F12;
+  border: 1px solid #FDE047;
+  font-weight: 700;
+}
+
+.badge-green {
+  background-color: #FEF08A;
+  color: #713F12;
+  border: 1px solid #FACC15;
+  font-weight: 700;
+}
+
+.badge-brown, .badge-black {
+  background-color: #0A0A0A;
+  color: #FACC15;
+  border: 1px solid #27272A;
+  font-weight: 700;
+}
+
+.badge-red {
+  background-color: #FEF2F2;
+  color: #EF4444;
+  border: 1px solid #FECACA;
+  font-weight: 700;
+}
+
+/* Standardized Form Inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="number"],
+select,
+textarea {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  color: #0A0A0A;
+  min-height: 2.75rem;
+  border-radius: 0.75rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dark input[type="text"],
+.dark input[type="email"],
+.dark input[type="password"],
+.dark input[type="tel"],
+.dark input[type="number"],
+.dark select,
+.dark textarea {
+  background-color: #FFFFFF;
+  border-color: #FDE047;
+  color: #0A0A0A;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #A1A1AA;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #FACC15 !important;
+  box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.25) !important;
+}
+
+/* Text Highlights */
+.text-gold, .text-yellow {
+  color: #FACC15;
+}
+
+.text-brown, .text-black {
+  color: #0A0A0A;
+}
+
+.text-green {
+  color: #CA8A04;
+}
+
+/* Modern Yellow & Black Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #FAFAFA;
+}
+.dark ::-webkit-scrollbar-track {
+  background: #0A0A0A;
+}
+::-webkit-scrollbar-thumb {
+  background: #E4E4E7;
+  border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #27272A;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FACC15;
+}
+
+/* Horizontal scroll hiding utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Touch Friendly Mobile Targets */
+@media (max-width: 768px) {
+  button, 
+  a, 
+  input, 
+  select {
+    min-height: 42px;
+  }
+}
+
+/* Accessibility: Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MADURAI MEENAKSHI KOVIL — HERITAGE NAVBAR SYSTEM
+   PawVerse AI · Tamil Kennel · Verified Pet Marketplace
+
+   PALETTE:
+     Crimson  #3D0000 → #7B0D0D → #A51515
+     Saffron  #D4500A → #F5901A → #FFAA33
+     Gold     #DAA520 → #F0C040 → #FFD700
+     Peacock  #0A6B5A → #14A085
+     Cream    #FFF8E7 → #FFFBF0
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Font Aliases ─────────────────────────────────────────────── */
+.font-cinzel {
+  font-family: 'Cinzel', 'Times New Roman', serif;
+}
+.font-cinzel-deco {
+  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+}
+.font-heritage {
+  font-family: 'IM Fell English SC', 'Cinzel', 'Times New Roman', serif;
+}
+
+/* ─── Level-1 Madurai Header Background ───────────────────────── */
+.heritage-header-bg {
+  background:
+    linear-gradient(160deg,
+      #2A0000 0%,
+      #4A0505 15%,
+      #7B0D0D 35%,
+      #8D1212 50%,
+      #7B0D0D 65%,
+      #4A0505 85%,
+      #2A0000 100%
+    );
+  position: relative;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.55);
+}
+
+/* Madurai diamond-lattice warm glow overlay */
+.heritage-pattern-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse 220px 90px at 18% 50%, rgba(255,215,0,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 220px 90px at 82% 50%, rgba(255,215,0,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 180px 70px at 50% 50%, rgba(212,80,10,0.05) 0%, transparent 70%),
+    repeating-linear-gradient(
+      45deg,
+      transparent 0px, transparent 22px,
+      rgba(255,215,0,0.025) 22px, rgba(255,215,0,0.025) 23px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0px, transparent 22px,
+      rgba(255,215,0,0.025) 22px, rgba(255,215,0,0.025) 23px
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Gopuram Multi-Band Stripes ───────────────────────────────── */
+@keyframes madurai-shimmer {
+  0%   { background-position: -300% center; }
+  100% { background-position:  300% center; }
+}
+
+/* Top stripe: saffron → gold → crimson → gold → saffron */
+.heritage-top-stripe {
+  height: 5px;
+  background: linear-gradient(
+    90deg,
+    #2A0000 0%,
+    #D4500A 8%,
+    #F5901A 20%,
+    #FFD700 32%,
+    #F0C040 40%,
+    #C0392B 50%,
+    #F0C040 60%,
+    #FFD700 68%,
+    #F5901A 80%,
+    #D4500A 92%,
+    #2A0000 100%
+  );
+  background-size: 300% 100%;
+  animation: madurai-shimmer 5s linear infinite;
+}
+
+/* Bottom stripe: peacock teal → gold → peacock teal */
+.heritage-bottom-stripe {
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    #2A0000 0%,
+    #0A6B5A 8%,
+    #14A085 22%,
+    #FFD700 35%,
+    #F0C040 47%,
+    #DAA520 50%,
+    #F0C040 53%,
+    #FFD700 65%,
+    #14A085 78%,
+    #0A6B5A 92%,
+    #2A0000 100%
+  );
+  background-size: 300% 100%;
+  animation: madurai-shimmer 6s linear infinite reverse;
+}
+
+/* ─── Level-1 Row Height ───────────────────────────────────────── */
+.heritage-level1 { min-height: 88px; }
+@media (max-width: 640px) { .heritage-level1 { min-height: 64px; } }
+
+/* ─── Center Frame — Madurai Carved Ornamental Box ────────────── */
+.heritage-center-frame {
+  background: linear-gradient(
+    160deg,
+    rgba(255,248,231,0.20) 0%,
+    rgba(255,215,0,0.14)   45%,
+    rgba(255,248,231,0.20) 100%
+  );
+  border: 2px solid #FFD700;
+  box-shadow:
+    inset 0 0 28px rgba(255,215,0,0.15),
+    inset 0 0 8px  rgba(212,80,10,0.08),
+    0 0 0 1px  #D4500A,
+    0 0 0 4px  #2A0000,
+    0 0 0 5px  rgba(255,215,0,0.3),
+    0 8px 32px rgba(0,0,0,0.65);
+  position: relative;
+}
+.heritage-center-frame::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(255,215,0,0.40);
+  pointer-events: none;
+}
+.heritage-center-frame::after {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(255,215,0,0.18);
+  pointer-events: none;
+}
+
+/* ─── Title Glow — Vivid Madurai Gold ─────────────────────────── */
+.heritage-title-glow {
+  color: #FFD700 !important;
+  text-shadow:
+    0 0 20px rgba(255,215,0,0.7),
+    0 0 40px rgba(255,165,0,0.35),
+    0 2px 0   rgba(42,0,0,0.95),
+    0 3px 8px rgba(0,0,0,0.8);
+}
+
+/* ─── Admin/Action Button — Madurai Gold ──────────────────────── */
+.heritage-btn-gold {
+  background: linear-gradient(135deg, #C0392B 0%, #D4500A 25%, #F0C040 55%, #FFD700 70%, #D4500A 100%);
+  color: #2A0000;
+  border: 1.5px solid #FFD700;
+  box-shadow: 0 2px 14px rgba(255,165,0,0.4);
+  transition: all 0.2s ease;
+  font-weight: 800;
+}
+.heritage-btn-gold:hover {
+  background: linear-gradient(135deg, #D4500A 0%, #FFD700 50%, #D4500A 100%);
+  box-shadow: 0 4px 22px rgba(255,215,0,0.6);
+  transform: translateY(-1px);
+}
+.heritage-btn-gold:active { transform: translateY(0); }
+
+/* ─── Level-2 Nav Bar — Warm Saffron Cream ────────────────────── */
+.heritage-nav-bg {
+  background: linear-gradient(
+    180deg,
+    #FFF5E0 0%,
+    #FFEDC0 30%,
+    #FFE8A8 60%,
+    #FFEDC0 80%,
+    #FFF5E0 100%
+  );
+  border-top: 2.5px solid #C0392B;
+  border-bottom: 2.5px solid #C0392B;
+  box-shadow:
+    0 4px 14px rgba(123,13,13,0.20),
+    inset 0 1px 0 rgba(255,215,0,0.60),
+    inset 0 -1px 0 rgba(255,215,0,0.40);
+}
+
+/* ─── Nav Item ────────────────────────────────────────────────── */
+.heritage-nav-item {
+  position: relative;
+  overflow: hidden;
+  font-family: 'Cinzel', 'Times New Roman', serif;
+  color: #4A0505;
+  letter-spacing: 0.04em;
+}
+
+/* Saffron-gold shimmer sweep */
+.heritage-nav-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(212,80,10,0.10) 50%,
+    rgba(255,215,0,0.14) 58%,
+    transparent 68%
+  );
+  transform: translateX(-110%);
+  transition: transform 0.45s ease;
+  pointer-events: none;
+}
+.heritage-nav-item:hover::after { transform: translateX(110%); }
+.heritage-nav-item:hover {
+  color: #2A0000 !important;
+  background: rgba(192,57,43,0.09);
+  border-color: #C0392B !important;
+}
+
+/* ─── Active Nav ──────────────────────────────────────────────── */
+.heritage-nav-active {
+  background: linear-gradient(
+    135deg,
+    rgba(192,57,43,0.16) 0%,
+    rgba(255,215,0,0.28) 50%,
+    rgba(192,57,43,0.16) 100%
+  ) !important;
+  color: #2A0000 !important;
+  border-color: #C0392B !important;
+  box-shadow:
+    inset 0 0 10px rgba(255,165,0,0.20),
+    0 2px 8px rgba(123,13,13,0.15);
+}
+/* Gold underline */
+.heritage-nav-active::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 10%; right: 10%;
+  height: 2.5px;
+  background: linear-gradient(90deg, transparent, #C0392B, #FFD700, #C0392B, transparent);
+  border-radius: 2px;
+}
+
+/* ─── Compact Scrolled Mode ───────────────────────────────────── */
+.heritage-header-compact .heritage-level1 {
+  min-height: 54px;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+}
+.heritage-header-compact .heritage-center-frame {
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+}
+.heritage-header-compact .heritage-top-stripe    { height: 3px; }
+.heritage-header-compact .heritage-bottom-stripe { height: 2px; }
+
+/* ─── Nav Bar Decorative Dot Accents ─────────────────────────── */
+.heritage-nav-bg::before,
+.heritage-nav-bg::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFD700 0%, #D4500A 80%);
+  box-shadow: 0 0 8px rgba(255,165,0,0.65);
+}
+.heritage-nav-bg::before { left: 10px; }
+.heritage-nav-bg::after  { right: 10px; }
+
+/* ─── Dropdowns ───────────────────────────────────────────────── */
+@keyframes heritage-dropdown {
+  from { opacity: 0; transform: scale(0.93) translateY(-6px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ─── Scrollbars ──────────────────────────────────────────────── */
+.heritage-header-bg ::-webkit-scrollbar          { width: 4px; }
+.heritage-header-bg ::-webkit-scrollbar-track    { background: #2A0000; }
+.heritage-header-bg ::-webkit-scrollbar-thumb    { background: #FFD700; border-radius: 999px; }
+
+/* ─── Focus Rings ─────────────────────────────────────────────── */
+.heritage-nav-item:focus-visible,
+.heritage-btn-gold:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+/* ─── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .font-cinzel { letter-spacing: 0.05em; }
+  .heritage-level1 { min-height: 60px; }
+}
+@media (max-width: 480px) {
+  .heritage-level1 {
+    min-height: 54px;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+  }
+}
+
+/* ─── Overflow guard ──────────────────────────────────────────── */
+header.sticky { overflow: visible; }
+
+
+/* ─── Font Aliases ─────────────────────────────────────────────── */
+.font-cinzel {
+  font-family: 'Cinzel', 'Times New Roman', serif;
+}
+.font-cinzel-deco {
+  font-family: 'Cinzel Decorative', 'Cinzel', serif;
+}
+.font-heritage {
+  font-family: 'IM Fell English SC', 'Cinzel', 'Times New Roman', serif;
+}
+
+/* ─── Level-1 Heritage Header Background ───────────────────────── */
+.heritage-header-bg {
+  background: linear-gradient(
+    160deg,
+    #1A0A04 0%,
+    #2B160D 20%,
+    #3D1E0C 45%,
+    #2B160D 70%,
+    #1A0A04 100%
+  );
+  position: relative;
+}
+
+/* Subtle warm texture overlay */
+.heritage-pattern-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse 120px 60px at 25% 50%, rgba(197,139,42,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 120px 60px at 75% 50%, rgba(197,139,42,0.06) 0%, transparent 70%),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 28px,
+      rgba(197,139,42,0.04) 28px,
+      rgba(197,139,42,0.04) 29px
+    );
+  pointer-events: none;
+}
+
+/* ─── Gold Stripe (top + bottom) ───────────────────────────────── */
+@keyframes heritage-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.heritage-top-stripe,
+.heritage-bottom-stripe {
+  background: linear-gradient(
+    90deg,
+    #6B3F10 0%,
+    #C58B2A 20%,
+    #E7B94E 40%,
+    #F5D27A 50%,
+    #E7B94E 60%,
+    #C58B2A 80%,
+    #6B3F10 100%
+  );
+  background-size: 200% 100%;
+  animation: heritage-shimmer 4s linear infinite;
+}
+
+/* ─── Level-1 Row height ───────────────────────────────────────── */
+.heritage-level1 {
+  min-height: 80px;
+}
+
+@media (max-width: 640px) {
+  .heritage-level1 {
+    min-height: 60px;
+  }
+}
+
+/* ─── Center Frame (Tamil Kennel ornamental box) ───────────────── */
+.heritage-center-frame {
+  background: linear-gradient(
+    135deg,
+    rgba(247,232,197,0.18) 0%,
+    rgba(231,185,78,0.10) 50%,
+    rgba(247,232,197,0.18) 100%
+  );
+  border: 1.5px solid #C58B2A;
+  box-shadow:
+    inset 0 0 20px rgba(197,139,42,0.12),
+    0 4px 24px rgba(0,0,0,0.5),
+    0 0 0 3px rgba(43,22,13,0.8);
+  position: relative;
+}
+
+/* Inner glowing border on center frame */
+.heritage-center-frame::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(231,185,78,0.25);
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+/* ─── Title glow effect ────────────────────────────────────────── */
+.heritage-title-glow {
+  text-shadow:
+    0 0 20px rgba(197,139,42,0.4),
+    0 2px 4px rgba(0,0,0,0.6),
+    0 1px 0 rgba(231,185,78,0.3);
+}
+
+/* ─── Gold button ──────────────────────────────────────────────── */
+.heritage-btn-gold {
+  background: linear-gradient(135deg, #C58B2A 0%, #E7B94E 50%, #C58B2A 100%);
+  color: #2B160D;
+  border: 1px solid #E7B94E;
+  box-shadow: 0 2px 12px rgba(197,139,42,0.4);
+  transition: all 0.2s ease;
+}
+.heritage-btn-gold:hover {
+  background: linear-gradient(135deg, #E7B94E 0%, #F5D27A 50%, #E7B94E 100%);
+  box-shadow: 0 4px 18px rgba(197,139,42,0.6);
+  transform: translateY(-1px);
+}
+.heritage-btn-gold:active {
+  transform: translateY(0);
+}
+
+/* ─── Level-2 Nav Bar ──────────────────────────────────────────── */
+.heritage-nav-bg {
+  background: linear-gradient(
+    180deg,
+    #F7E8C5 0%,
+    #FFF8E7 40%,
+    #F7E8C5 100%
+  );
+  box-shadow: 0 2px 10px rgba(43,22,13,0.15);
+}
+
+/* ─── Nav Item base + hover ────────────────────────────────────── */
+.heritage-nav-item {
+  position: relative;
+  overflow: hidden;
+  font-family: 'Cinzel', 'Times New Roman', serif;
+}
+
+/* Shimmer sweep on hover */
+.heritage-nav-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(197,139,42,0.18) 50%,
+    transparent 60%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.4s ease;
+  pointer-events: none;
+}
+.heritage-nav-item:hover::after {
+  transform: translateX(100%);
+}
+
+/* Active nav state */
+.heritage-nav-active {
+  background: linear-gradient(
+    135deg,
+    rgba(197,139,42,0.20) 0%,
+    rgba(231,185,78,0.25) 50%,
+    rgba(197,139,42,0.20) 100%
+  );
+  box-shadow: inset 0 0 8px rgba(197,139,42,0.15), 0 1px 4px rgba(43,22,13,0.1);
+}
+
+/* Active underline accent */
+.heritage-nav-active::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 15%;
+  right: 15%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #C58B2A, #E7B94E, #C58B2A, transparent);
+  border-radius: 2px;
+}
+
+/* ─── Compact/scrolled mode ────────────────────────────────────── */
+.heritage-header-compact .heritage-level1 {
+  min-height: 52px;
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
+}
+
+.heritage-header-compact .heritage-center-frame {
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
+}
+
+/* Hide the ornamental bottom stripe when compact */
+.heritage-header-compact .heritage-bottom-stripe {
+  height: 2px;
+}
+
+/* Slightly shrink the top stripe when compact */
+.heritage-header-compact .heritage-top-stripe {
+  height: 2px;
+}
+
+/* ─── Decorative corner dot accent on nav bar ──────────────────── */
+.heritage-nav-bg::before,
+.heritage-nav-bg::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #E7B94E, #C58B2A);
+  box-shadow: 0 0 6px rgba(197,139,42,0.5);
+}
+.heritage-nav-bg::before { left: 8px; }
+.heritage-nav-bg::after  { right: 8px; }
+
+/* ─── Scrollbar override for heritage areas ────────────────────── */
+.heritage-header-bg ::-webkit-scrollbar,
+.heritage-nav-bg ::-webkit-scrollbar {
+  width: 4px;
+}
+.heritage-header-bg ::-webkit-scrollbar-track,
+.heritage-nav-bg ::-webkit-scrollbar-track {
+  background: #2B160D;
+}
+.heritage-header-bg ::-webkit-scrollbar-thumb,
+.heritage-nav-bg ::-webkit-scrollbar-thumb {
+  background: #C58B2A;
+  border-radius: 999px;
+}
+
+/* ─── Notification dropdown polish ─────────────────────────────── */
+.heritage-notif-panel {
+  animation: heritage-dropdown 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: top right;
+}
+
+@keyframes heritage-dropdown {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ─── Mobile drawer animation ───────────────────────────────────── */
+@keyframes heritage-drawer-slide {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Applied to the drawer inner panel via JS — here for reference.
+   The panel uses ml-auto + fixed positioning so it slides from right. */
+
+/* ─── Focus rings (accessibility) ─────────────────────────────── */
+.heritage-nav-item:focus-visible,
+.heritage-btn-gold:focus-visible {
+  outline: 2px solid #E7B94E;
+  outline-offset: 2px;
+}
+
+/* ─── Hero section heritage accent overlay ─────────────────────── */
+.heritage-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(43,22,13,0.08) 0%,
+    transparent 30%
+  );
+  pointer-events: none;
+}
+
+/* ─── Responsive font scaling for Cinzel ───────────────────────── */
+@media (max-width: 768px) {
+  .font-cinzel {
+    letter-spacing: 0.05em;
+  }
+  .heritage-level1 {
+    min-height: 56px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heritage-level1 {
+    min-height: 52px;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+  }
+}
+
+/* ─── Prevent overflow from heritage header ─────────────────────── */
+header.sticky {
+  overflow: visible;
+}
+
+/* ─── Lock icon color override inside nav items ─────────────────── */
+.heritage-nav-item .lucide-lock {
+  color: #9E4F2C;
+}

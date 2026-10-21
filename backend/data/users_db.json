@@ -1,0 +1,35 @@
+[
+  {
+    "id": "6ab3bd266a30440a1194447f",
+    "_id": "6ab3bd266a30440a1194447f",
+    "fullName": "PawVerse AI Super Admin",
+    "email": "admin@gmail.com",
+    "password": "$2b$10$qTqnKdfkSoZoTrzupmumaO2bDmROqVrCZOIhIJL15MdetH5qUUMEi",
+    "role": "SUPER_ADMIN",
+    "accountStatus": "ACTIVE",
+    "emailVerified": true,
+    "createdAt": "2026-09-23T11:51:02.124Z"
+  },
+  {
+    "id": "6ab20dd040ac0839c037f2bf",
+    "_id": "6ab20dd040ac0839c037f2bf",
+    "fullName": "Admin User",
+    "email": "newadmin@gmail.com",
+    "password": "$2b$10$oQqEVh1rG2CQvT1sGmM9I.4UdvgrX5Vs5voRDdbHDTzDALgzGK8E6",
+    "role": "SUPER_ADMIN",
+    "accountStatus": "ACTIVE",
+    "emailVerified": true,
+    "createdAt": "2026-09-22T05:10:40.019Z"
+  },
+  {
+    "id": "6ace29c385886413748a2e42",
+    "_id": "6ace29c385886413748a2e42",
+    "fullName": "s",
+    "email": "admin1@gmail.com",
+    "password": "$2b$10$eLD/u/CAXJANPBapt8J/seeZevr8iFKSkMCy6RiL4mQm59wgNljGi",
+    "role": "SUPER_ADMIN",
+    "accountStatus": "ACTIVE",
+    "emailVerified": true,
+    "createdAt": "2026-10-13T12:53:23.043Z"
+  }
+]

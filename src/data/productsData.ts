@@ -1,0 +1,304 @@
+export interface DogProduct {
+  id: string;
+  _id?: string;
+  name: string;
+  type: 'FOOD' | 'ACCESSORY';
+  category: string;
+  brand: string;
+  price: number;
+  originalPrice: number;
+  stock: number;
+  rating: number;
+  reviewsCount: number;
+  weight?: string;
+  lifeStage?: string;
+  material?: string;
+  size?: string;
+  images: string[];
+  description: string;
+  features: string[];
+  ingredients?: string;
+  isAvailable: boolean;
+  featured?: boolean;
+  addedBy: 'admin';
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export const INITIAL_PRODUCTS: DogProduct[] = [
+  // --- DOG FOODS ---
+  {
+    id: 'prod_food_01',
+    name: 'Royal Canin Maxi Puppy Dry Dog Food',
+    type: 'FOOD',
+    category: 'Puppy Nutrition',
+    brand: 'Royal Canin',
+    price: 8499,
+    originalPrice: 9600,
+    stock: 35,
+    rating: 4.9,
+    reviewsCount: 42,
+    weight: '15 kg',
+    lifeStage: 'Puppy (2 - 15 months)',
+    images: [
+      'https://images.unsplash.com/photo-1589924691995-400dc9ecc119?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80'
+    ],
+    description: 'Tailored nutritional profile for large breed puppies (adult weight 26 to 44 kg). Supports natural defenses, digestive health, and harmonious skeletal development with moderate energy.',
+    features: [
+      'High quality LIP protein for optimal digestive tolerance',
+      'Antioxidant complex including vitamin E to boost immune system',
+      'Balanced calcium and phosphorus for bone and joint support'
+    ],
+    ingredients: 'Dehydrated poultry protein, rice, maize flour, dehydrated pork protein, animal fats, maize, vegetable protein isolate, wheat flour, beet pulp, fish oil.',
+    isAvailable: true,
+    featured: true,
+    addedBy: 'admin'
+  },
+  {
+    id: 'prod_food_02',
+    name: 'Pedigree Pro Expert Nutrition for Active Adults',
+    type: 'FOOD',
+    category: 'Adult Dog Food',
+    brand: 'Pedigree Pro',
+    price: 3299,
+    originalPrice: 3800,
+    stock: 48,
+    rating: 4.7,
+    reviewsCount: 29,
+    weight: '10 kg',
+    lifeStage: 'Adult (1 - 7 years)',
+    images: [
+      'https://images.unsplash.com/photo-1568640347023-a616a30bc3bd?auto=format&fit=crop&w=800&q=80'
+    ],
+    description: 'Professional high-performance nutrition formulated for active working dogs and high energy sporting companions. Packed with 28% crude protein and essential amino acids.',
+    features: [
+      '28% crude protein for lean muscle mass maintenance',
+      'Zinc and Omega fatty acids for glossy coat health',
+      'Glucosamine & chondroitin to sustain joint flexibility'
+    ],
+    ingredients: 'Cereal and cereal by-products, chicken and chicken by-products, meat and meat by-products, soybean oil, iodised salt, essential vitamins and organic minerals.',
+    isAvailable: true,
+    featured: true,
+    addedBy: 'admin'
+  },
+  {
+    id: 'prod_food_03',
+    name: 'Drools Focus Super Premium Puppy Formula',
+    type: 'FOOD',
+    category: 'Starter Nutrition',
+    brand: 'Drools',
+    price: 1850,
+    originalPrice: 2150,
+    stock: 60,
+    rating: 4.8,
+    reviewsCount: 55,
+    weight: '4 kg',
+    lifeStage: 'Puppy (3 weeks - 12 months)',
+    images: [
+      'https://images.unsplash.com/photo-1589924691995-400dc9ecc119?auto=format&fit=crop&w=800&q=80'
+    ],
+    description: 'No corn, wheat, or soy formula. Formulated with real chicken as #1 ingredient to guarantee superior bioavailability, brain development with DHA, and robust immunity.',
+    features: [
+      'Real deboned chicken is the primary source of protein',
+      'Enriched with DHA from fish oil for cognitive agility',
+      'Omega 3 & 6 fatty acids for healthy skin and brilliant luster'
+    ],
+    ingredients: 'Real chicken, whole dried eggs, long grain rice, oatmeal, flaxseed, fish oil, brewer\'s dried yeast, rosemary extract, prebiotic FOS.',
+    isAvailable: true,
+    featured: false,
+    addedBy: 'admin'
+  },
+  {
+    id: 'prod_food_04',
+    name: 'Farmina N&D Pumpkin Lamb & Blueberry Grain-Free',
+    type: 'FOOD',
+    category: 'Grain-Free Organic',
+    brand: 'Farmina',
+    price: 2750,
+    originalPrice: 3100,
+    stock: 22,
+    rating: 5.0,
+    reviewsCount: 38,
+    weight: '2.5 kg',
+    lifeStage: 'All Life Stages',
+    images: [
+      'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?auto=format&fit=crop&w=800&q=80'
+    ],
+    description: 'Italian ultra-premium grain-free formula with 96% protein of animal origin. Features pasture-raised lamb, dietary pumpkin, and antioxidant-rich blueberries for allergy-prone dogs.',
+    features: [
+      '0% grains, gluten-free hypoallergenic recipe',
+      'Glycemic-index friendly pumpkin supports easy digestion',
+      'Infused with wild blueberries and pomegranate essences'
+    ],
+    ingredients: 'Fresh lamb, dehydrated lamb meat, pea starch, chicken fat, dried pumpkin, dried whole eggs, herring oil, dried blueberries, turmeric.',
+    isAvailable: true,
+    featured: true,
+    addedBy: 'admin'
+  },
+  {
+    id: 'prod_food_05',
+    name: 'Gnawlers Calcium Milk Dental Bone Treats',
+    type: 'FOOD',
+    category: 'Treats & Chews',
+    brand: 'Gnawlers',
+    price: 499,
+    originalPrice: 650,
+    stock: 80,
+    rating: 4.6,
+    reviewsCount: 64,
+    weight: '30 pcs (270g)',
+    lifeStage: 'Puppies & Small Breeds',
+    images: [
+      'https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=800&q=80'
+    ],
+    description: 'Fortified calcium milk chew bones that combat plaque and tartar buildup while fulfilling your puppy\'s natural instinctive urge to gnaw.',
+    features: [
+      'Rich organic milk flavor irresistible to puppies',
+      'Fortified with bio-available calcium for teeth and bone strengthening',
+      'Cleans gum lines and freshens canine breath'
+    ],
+    ingredients: 'Milk powder, isolated soy protein, corn starch, dietary fiber, calcium carbonate, sodium caseinate, natural rosemary aroma.',
+    isAvailable: true,
+    featured: false,
+    addedBy: 'admin'
+  },
+
+  // --- DOG ACCESSORIES ---
+  {
+    id: 'prod_acc_01',
+    name: 'PawVerse Ergonomic No-Pull Reflective Harness',
+    type: 'ACCESSORY',
+    category: 'Harnesses & Leashes',
+    brand: 'PawVerse Elite',
+    price: 1299,
+    originalPrice: 1699,
+    stock: 40,
+    rating: 4.9,
+    reviewsCount: 51,
+    material: 'Oxford 1680D Mesh & Zinc Alloy',
+    size: 'Medium / Large (Adjustable)',
+    images: [
+      'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=800&q=80'
+    ],
+    description: 'Premium escape-proof no-pull canine vest harness. Dual metal leash attachment rings distribute pulling pressure evenly across chest to prevent throat choking.',
+    features: [
+      'High-visibility 3M reflective threading for night safety',
+      'Soft breathable sponge padding prevents chaffing',
+      'Top safety grab handle for quick control in traffic'
+    ],
+    ingredients: '1680D Oxford waterproof outer, breathable honeycomb mesh lining, heavy-duty ABS quick-snap buckles, rust-proof zinc alloy D-rings.',
+    isAvailable: true,
+    featured: true,
+    addedBy: 'admin'
+  },
+  {
+    id: 'prod_acc_02',
+    name: 'Orthopedic Memory Foam Pet Lounger Bed',
+    type: 'ACCESSORY',
+    category: 'Beds & Furniture',
+    brand: 'PawVerse Elite',
+    price: 2499,
+    originalPrice: 3200,
+    stock: 18,
+    rating: 5.0,
+    reviewsCount: 33,
+    material: 'High Density Memory Foam & Plush Micro-Velvet',
+    size: 'Large (90cm x 70cm x 15cm)',
+    images: [
+      'https://images.unsplash.com/photo-1541599540903-216a46ca1dc0?auto=format&fit=crop&w=800&q=80'
+    ],
+    description: 'Medical-grade orthopedic dual-layer memory foam bed designed to soothe arthritis, hip dysplasia, and joint stiffness. Removable, machine-washable waterproof cover.',
+    features: [
+      '3-inch therapeutic orthopedic base foam conforms to body',
+      'Supportive bolsters provide headrest security and spinal alignment',
+      'Non-skid silicone dot rubber bottom stays planted on tile floors'
+    ],
+    ingredients: 'Base: CertiPUR-US high density memory foam; Cover: Tear-resistant plush microsuede with waterproof TPU internal lining.',
+    isAvailable: true,
+    featured: true,
+    addedBy: 'admin'
+  },
+  {
+    id: 'prod_acc_03',
+    name: 'Stainless Steel Anti-Skid Double Diner Bowls',
+    type: 'ACCESSORY',
+    category: 'Bowls & Feeders',
+    brand: 'K9 Gear',
+    price: 649,
+    originalPrice: 899,
+    stock: 55,
+    rating: 4.8,
+    reviewsCount: 44,
+    material: 'Food-grade SUS304 Stainless Steel & Silicone',
+    size: '2 x 850ml (Medium / Large)',
+    images: [
+      'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=800&q=80'
+    ],
+    description: 'Hygienic twin bowl feeding station with spill-proof silicone splash tray. Rust-resistant food-grade stainless steel bowls are dishwasher safe and bacteria resistant.',
+    features: [
+      'Raised silicone mat catches water spills and stray kibble',
+      'Detachable stainless steel bowls for effortless washing',
+      'Non-toxic BPA-free materials completely safe for pets'
+    ],
+    ingredients: 'SUS304 food-grade polished stainless steel, LFGB-certified food contact silicone.',
+    isAvailable: true,
+    featured: false,
+    addedBy: 'admin'
+  },
+  {
+    id: 'prod_acc_04',
+    name: 'Heavy-Duty 5-Meter Retractable Safety Leash',
+    type: 'ACCESSORY',
+    category: 'Harnesses & Leashes',
+    brand: 'PawVerse Elite',
+    price: 899,
+    originalPrice: 1250,
+    stock: 30,
+    rating: 4.7,
+    reviewsCount: 27,
+    material: 'High-Tensile Nylon Tape & ABS Casing',
+    size: '5m Length (Up to 50kg Dogs)',
+    images: [
+      'https://images.unsplash.com/photo-1601758124510-52d02ddb7cbd?auto=format&fit=crop&w=800&q=80'
+    ],
+    description: 'Smooth 360-degree tangle-free retractable walking leash. One-hand quick-brake and instant lock mechanism keeps your dog safe in open parks or dense urban sidewalks.',
+    features: [
+      'Tested for over 50,000 retraction cycles with stainless steel spring',
+      'Ergonomic soft-touch anti-slip grip handle',
+      '360 swivel heavy-duty chrome plated clip hook'
+    ],
+    ingredients: 'Impact-resistant ABS polymer casing, high strength nylon webbing tape, stainless steel recoil spring, chrome alloy swivel snap.',
+    isAvailable: true,
+    featured: false,
+    addedBy: 'admin'
+  },
+  {
+    id: 'prod_acc_05',
+    name: 'Self-Cleaning Deshedding Pet Slicker Brush',
+    type: 'ACCESSORY',
+    category: 'Grooming & Care',
+    brand: 'K9 Gear',
+    price: 599,
+    originalPrice: 799,
+    stock: 65,
+    rating: 4.9,
+    reviewsCount: 78,
+    material: 'Fine Stainless Steel Bent Bristles & Rubber Grip',
+    size: 'Universal (All Coat Types)',
+    images: [
+      'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=800&q=80'
+    ],
+    description: 'Effortlessly removes loose undercoat, dead knots, dander, and trapped dirt. One-click button retracts bristles and drops hair straight into the dustbin in 1 second.',
+    features: [
+      'Gentle rounded massage tips protect sensitive puppy skin',
+      'Reduces shedding around home and upholstery by up to 90%',
+      'One-click bristle ejector for instantaneous self-cleaning'
+    ],
+    ingredients: 'Hypoallergenic stainless steel bristle pins with resin comfort tips, TPR rubber ergonomic contour handle.',
+    isAvailable: true,
+    featured: true,
+    addedBy: 'admin'
+  }
+];
