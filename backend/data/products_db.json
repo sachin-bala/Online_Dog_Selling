@@ -1,5 +1,37 @@
 [
   {
+    "id": "6af346fe4891ef33a312a81e",
+    "_id": "6af346fe4891ef33a312a81e",
+    "name": "sac",
+    "type": "FOOD",
+    "category": "Puppy Nutrition",
+    "brand": "Royal Canin",
+    "price": 8499,
+    "originalPrice": 10000,
+    "stock": 35,
+    "rating": 4.9,
+    "reviewsCount": 1,
+    "weight": "15 kg",
+    "lifeStage": "Puppy (2 - 15 months)",
+    "material": "",
+    "size": "",
+    "images": [
+      "https://images.unsplash.com/photo-1589924691995-400dc9ecc119?auto=format&fit=crop&w=800&q=80"
+    ],
+    "description": "Veterinarian-formulated complete dry puppy food. Promotes sound bone development and robust immunity.",
+    "features": [
+      "High-protein LIP digestible formula",
+      "Antioxidant complex for puppy immunity",
+      "Calcium & phosphorus for strong bones"
+    ],
+    "ingredients": "Dehydrated poultry protein, rice, maize flour, fish oil, beet pulp, antioxidant vitamin complex.",
+    "isAvailable": true,
+    "featured": false,
+    "addedBy": "admin",
+    "createdAt": "2026-11-10T16:31:58.262Z",
+    "updatedAt": "2026-11-10T16:31:58.262Z"
+  },
+  {
     "id": "6ab64eddde9ded51a5786205",
     "_id": "6ab64eddde9ded51a5786205",
     "name": ",mln,m",

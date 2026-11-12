@@ -374,3 +374,89 @@ export const rejectDogOrder = async (req: AuthRequest, res: Response): Promise<a
   }
 };
 
+// ─── ADMIN: Approve Payment manually (mark as PAID without Razorpay) ──────────
+export const approveOrderPayment = async (req: AuthRequest, res: Response): Promise<any> => {
+  try {
+    const { orderId } = req.params;
+
+    const order = await Order.findById(orderId).populate('dogId').populate('customerId');
+    if (!order) {
+      return res.status(404).json(formatApiResponse(false, 'Order not found'));
+    }
+
+    // Update payment record to CAPTURED
+    await Payment.findOneAndUpdate(
+      { orderId: order._id },
+      {
+        status: 'CAPTURED',
+        razorpayPaymentId: `admin_approved_${Date.now()}`,
+        razorpaySignature: `admin_sig_${Date.now()}`,
+      }
+    );
+
+    // Update order payment status and move to PENDING_APPROVAL for dispatch
+    order.paymentStatus = 'PAID';
+    if (order.orderStatus === 'PENDING_PAYMENT') {
+      order.orderStatus = 'PENDING_APPROVAL';
+    }
+    await order.save();
+
+    // Notify customer
+    if (order.customerId) {
+      const customerUserId = (order.customerId as any)._id || order.customerId;
+      const dogName = (order.dogId as any)?.name || 'Dog';
+      await createNotification(
+        customerUserId.toString(),
+        'Payment Approved by Admin ✅',
+        `Your payment for "${dogName}" has been manually approved by PawVerse Admin. Your order is now pending dispatch.`,
+        'ORDER'
+      );
+    }
+
+    return res.status(200).json(formatApiResponse(true, 'Payment approved successfully. Order moved to Pending Approval.', order));
+  } catch (error: any) {
+    return res.status(500).json(formatApiResponse(false, error.message));
+  }
+};
+
+// ─── ADMIN: Cancel Order (immediate cancel, no reason required) ───────────────
+export const cancelDogOrder = async (req: AuthRequest, res: Response): Promise<any> => {
+  try {
+    const { orderId } = req.params;
+    const { reason } = req.body;
+
+    const order = await Order.findById(orderId).populate('dogId').populate('customerId');
+    if (!order) {
+      return res.status(404).json(formatApiResponse(false, 'Order not found'));
+    }
+
+    order.orderStatus = 'CANCELLED';
+    order.paymentStatus = order.paymentStatus === 'PAID' ? 'REFUNDED' : order.paymentStatus;
+    order.rejectionReason = reason || 'Cancelled by Admin';
+    await order.save();
+
+    // Release dog back to available pool
+    if (order.dogId) {
+      const dogId = (order.dogId as any)._id || order.dogId;
+      await Dog.findByIdAndUpdate(dogId, { availability: true, status: 'APPROVED' });
+    }
+
+    // Notify customer
+    if (order.customerId) {
+      const customerUserId = (order.customerId as any)._id || order.customerId;
+      const dogName = (order.dogId as any)?.name || 'Dog';
+      const refundNote = order.paymentStatus === 'REFUNDED' ? ' A refund will be processed within 5-7 business days.' : '';
+      await createNotification(
+        customerUserId.toString(),
+        'Order Cancelled by Admin',
+        `Your order for "${dogName}" has been cancelled. Reason: ${order.rejectionReason}.${refundNote}`,
+        'ORDER'
+      );
+    }
+
+    return res.status(200).json(formatApiResponse(true, 'Order cancelled successfully.', order));
+  } catch (error: any) {
+    return res.status(500).json(formatApiResponse(false, error.message));
+  }
+};
+

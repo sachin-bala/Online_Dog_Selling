@@ -205,7 +205,12 @@ io.on('connection', (socket) => {
 const PORT = env.PORT;
 
 const startServer = async () => {
-  await connectDB();
+  const dbOk = await connectDB();
+  if (!dbOk) {
+    console.error('[ PawVerse DB ] Unable to connect to database. Exiting server startup.');
+    process.exit(1);
+    return;
+  }
 
   try {
     const { Dog } = await import('./models/Dog.js');

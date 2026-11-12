@@ -317,6 +317,23 @@ export const api = {
     return handleResponse(res);
   },
 
+  approveOrderPayment: async (orderId: string) => {
+    const res = await fetch(`${API_BASE_URL}/admin/orders/${orderId}/approve-payment`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
+    });
+    return handleResponse(res);
+  },
+
+  cancelDogOrder: async (orderId: string, reason?: string) => {
+    const res = await fetch(`${API_BASE_URL}/admin/orders/${orderId}/cancel`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
+      body: JSON.stringify({ reason: reason || 'Cancelled by Admin' }),
+    });
+    return handleResponse(res);
+  },
+
   // Dogs
   getDogs: async (queryParams: string = '') => {
     const res = await fetch(`${API_BASE_URL}/dogs${queryParams ? `?${queryParams}` : ''}`);

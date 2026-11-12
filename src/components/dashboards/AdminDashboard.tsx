@@ -55,6 +55,9 @@ export const AdminDashboard: React.FC = () => {
     loginAdmin,
     logout,
     orders,
+    approveOrder,
+    dispatchOrder,
+    rejectOrder,
     products,
     addProduct,
     updateProduct,
@@ -154,6 +157,13 @@ export const AdminDashboard: React.FC = () => {
   const [dbStats, setDbStats] = useState<any>(null);
   const [dbUsers, setDbUsers] = useState<any[]>([]);
   const [dbOrders, setDbOrders] = useState<any[]>([]);
+
+  // Order management state
+  const [orderActionLoading, setOrderActionLoading] = useState<string | null>(null);
+  const [rejectOrderModal, setRejectOrderModal] = useState<{ id: string; dogName: string } | null>(null);
+  const [rejectReason, setRejectReason] = useState('');
+  const [orderSearchQuery, setOrderSearchQuery] = useState('');
+  const [orderStatusFilter, setOrderStatusFilter] = useState<'All' | 'PENDING_APPROVAL' | 'APPROVED' | 'OUT_FOR_DELIVERY' | 'DELIVERED' | 'CANCELLED'>('All');
 
   // --- Dog Show Event Management State ---
   const [isCreateShowOpen, setIsCreateShowOpen] = useState(false);
@@ -2008,35 +2018,296 @@ export const AdminDashboard: React.FC = () => {
           )}
 
           {/* TAB 4: ORDERS & TRANSACTIONS */}
-          {activeAdminTab === 'orders' && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-bold text-[#0A0A0A] font-heading">
-                Orders & Escrow Processing ({orders.length})
-              </h3>
+          {activeAdminTab === 'orders' && (() => {
+            const allOrders = [...orders, ...dbOrders.filter(dbo => !orders.find(o => o.id === dbo._id))];
 
-              <div className="space-y-3">
-                {orders.map((ord) => (
-                  <div key={ord.id} className="p-5 bg-[#FEF9C3] dark:bg-[#FEF9C3] border border-[#FDE047] rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
-                    <div className="space-y-1">
-                      <span className="text-xs font-mono text-[#713F12]">#{ord.id}</span>
-                      <h4 className="font-bold text-[#0A0A0A] text-sm">
-                        {ord.dog?.name} ({ord.dog?.breed}) – <span className="font-black text-[#0A0A0A]">₹{ord.amount?.toLocaleString()}</span>
-                      </h4>
-                      <p className="text-xs text-[#713F12]">
-                        Buyer: {ord.buyerInfo?.name || 'Customer'} • Tracking: {ord.trackingNumber}
-                      </p>
+            const filteredOrders = allOrders.filter(ord => {
+              const status = ord.orderStatus || ord.status || '';
+              const dogName = (ord.dog?.name || ord.dogId?.name || '').toLowerCase();
+              const buyerName = (ord.buyerInfo?.name || ord.buyerName || ord.customerId?.fullName || '').toLowerCase();
+              const matchesSearch = !orderSearchQuery || dogName.includes(orderSearchQuery.toLowerCase()) || buyerName.includes(orderSearchQuery.toLowerCase());
+              const matchesStatus = orderStatusFilter === 'All' || status === orderStatusFilter;
+              return matchesSearch && matchesStatus;
+            });
+
+            const pendingApprovalCount = allOrders.filter(o => (o.orderStatus || o.status) === 'PENDING_APPROVAL').length;
+
+            const getStatusStyle = (status: string) => {
+              if (status === 'PENDING_APPROVAL') return 'bg-amber-100 text-amber-800 border-amber-300';
+              if (status === 'APPROVED') return 'bg-blue-100 text-blue-800 border-blue-300';
+              if (status === 'OUT_FOR_DELIVERY' || status === 'DISPATCHED') return 'bg-purple-100 text-purple-800 border-purple-300';
+              if (status === 'DELIVERED') return 'bg-green-100 text-green-800 border-green-300';
+              if (status === 'CANCELLED') return 'bg-red-100 text-red-800 border-red-300';
+              return 'bg-[#FEF9C3] text-[#713F12] border-[#FDE047]';
+            };
+
+            return (
+              <div className="space-y-5">
+                {/* Header */}
+                <div className="p-5 bg-[#FEF9C3] border border-[#FDE047] rounded-2xl shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#0A0A0A] text-[#FACC15]">Admin Only</span>
+                      <h3 className="text-base sm:text-lg font-bold text-[#0A0A0A] flex items-center gap-2">
+                        <ShoppingBag className="w-5 h-5 text-[#CA8A04]" />
+                        Purchase Orders &amp; Approval ({allOrders.length})
+                      </h3>
                     </div>
+                    <p className="text-xs text-[#713F12]">Review buyer purchase details. Approve, dispatch, or reject dog purchase requests.</p>
+                  </div>
+                  {pendingApprovalCount > 0 && (
+                    <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-100 border border-amber-300 text-amber-800 text-xs font-bold">
+                      <Clock className="w-3.5 h-3.5" />
+                      {pendingApprovalCount} Awaiting Approval
+                    </span>
+                  )}
+                </div>
 
-                    <div className="flex items-center gap-2">
-                      <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#0A0A0A] text-[#FACC15] border border-[#27272A]">
-                        {ord.status}
-                      </span>
+                {/* Search & Filter */}
+                <div className="p-4 bg-[#FEF9C3] border border-[#FDE047] rounded-2xl shadow-sm flex flex-col md:flex-row items-stretch md:items-center gap-3">
+                  <div className="relative flex-1">
+                    <Search className="w-4 h-4 text-[#713F12] absolute left-3 top-3 pointer-events-none" />
+                    <input
+                      type="text"
+                      placeholder="Search by dog name or buyer name..."
+                      value={orderSearchQuery}
+                      onChange={(e) => setOrderSearchQuery(e.target.value)}
+                      className="w-full bg-white border border-[#FDE047] rounded-xl py-2 pl-9 pr-3 text-xs text-[#0A0A0A] focus:outline-none focus:border-[#EAB308]"
+                    />
+                  </div>
+                  <div className="flex items-center gap-1 flex-wrap">
+                    {(['All', 'PENDING_APPROVAL', 'APPROVED', 'OUT_FOR_DELIVERY', 'DELIVERED', 'CANCELLED'] as const).map(st => (
+                      <button
+                        key={st}
+                        onClick={() => setOrderStatusFilter(st)}
+                        className={`px-2.5 py-1 rounded-xl text-[10px] font-bold transition-all ${orderStatusFilter === st ? 'bg-[#0A0A0A] text-[#FACC15]' : 'bg-white border border-[#FDE047] text-[#713F12] hover:bg-[#FEF08A]'}`}
+                      >
+                        {st === 'All' ? 'All' : st === 'PENDING_APPROVAL' ? 'Pending' : st === 'OUT_FOR_DELIVERY' ? 'In Transit' : st.charAt(0) + st.slice(1).toLowerCase()}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Orders List */}
+                {filteredOrders.length === 0 ? (
+                  <div className="p-10 bg-[#FEF9C3] border border-[#FDE047] rounded-2xl text-center text-sm text-[#713F12]">
+                    No orders found.
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {filteredOrders.map((ord) => {
+                      const orderId = ord.id || ord._id;
+                      const status = ord.orderStatus || ord.status || 'PENDING_APPROVAL';
+                      const dogName = ord.dog?.name || ord.dogId?.name || 'Unknown Dog';
+                      const dogBreed = ord.dog?.breed || ord.dogId?.breed || '';
+                      const dogImage = ord.dog?.images?.[0] || ord.dogId?.images?.[0] || '';
+                      const buyerName = ord.buyerInfo?.name || ord.buyerName || ord.customerId?.fullName || 'Customer';
+                      const buyerEmail = ord.buyerInfo?.email || ord.buyerEmail || ord.customerId?.email || '';
+                      const buyerPhone = ord.buyerInfo?.phone || ord.buyerPhone || '';
+                      const address = ord.deliveryAddress || ord.buyerInfo?.address || {};
+                      const addressStr = [address.street, address.city, address.state, address.pincode, address.country].filter(Boolean).join(', ');
+                      const amount = ord.amount || 0;
+                      const paymentStatus = ord.paymentStatus || 'PENDING';
+                      const trackingId = ord.trackingNumber || ord.trackingId || '';
+                      const createdAt = ord.createdAt ? new Date(ord.createdAt).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) : '';
+                      const isLoading = orderActionLoading === orderId;
+                      const isPending = status === 'PENDING_APPROVAL';
+                      const isApproved = status === 'APPROVED';
+
+                      return (
+                        <div key={orderId} className={`p-5 border rounded-2xl shadow-sm space-y-4 ${isPending ? 'bg-amber-50 border-amber-300' : 'bg-[#FEF9C3] border-[#FDE047]'}`}>
+                          
+                          {/* Top Row: Status badge + amount */}
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className={`px-3 py-1 rounded-full text-xs font-bold border ${getStatusStyle(status)}`}>
+                                {isPending ? '⏳ Pending Admin Approval' : status === 'APPROVED' ? '✅ Approved' : status === 'OUT_FOR_DELIVERY' ? '🚚 Out for Delivery' : status === 'DELIVERED' ? '🎉 Delivered' : status === 'CANCELLED' ? '❌ Cancelled' : status}
+                              </span>
+                              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${paymentStatus === 'PAID' ? 'bg-green-100 text-green-800 border-green-300' : 'bg-gray-100 text-gray-700 border-gray-300'}`}>
+                                {paymentStatus === 'PAID' ? '💳 Paid' : `Payment: ${paymentStatus}`}
+                              </span>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-lg font-black text-[#0A0A0A]">₹{amount.toLocaleString()}</div>
+                              <div className="text-[10px] text-[#713F12]">{createdAt}</div>
+                            </div>
+                          </div>
+
+                          {/* Dog + Buyer Info */}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {/* Dog Details */}
+                            <div className="flex items-start gap-3 p-3 bg-white rounded-xl border border-[#FDE047]">
+                              {dogImage && (
+                                <img src={dogImage} alt={dogName} className="w-14 h-14 rounded-lg object-cover border border-[#FDE047] shrink-0" />
+                              )}
+                              <div className="min-w-0">
+                                <div className="text-[10px] font-bold uppercase tracking-wider text-[#713F12] mb-0.5">Dog Purchased</div>
+                                <div className="font-bold text-sm text-[#0A0A0A] truncate">{dogName}</div>
+                                {dogBreed && <div className="text-xs text-[#713F12]">{dogBreed}</div>}
+                                {trackingId && <div className="text-[10px] font-mono text-[#065F46] mt-1">📍 {trackingId}</div>}
+                              </div>
+                            </div>
+
+                            {/* Buyer Details */}
+                            <div className="p-3 bg-white rounded-xl border border-[#FDE047] space-y-1">
+                              <div className="text-[10px] font-bold uppercase tracking-wider text-[#713F12] mb-0.5">Buyer Details</div>
+                              <div className="font-bold text-sm text-[#0A0A0A]">{buyerName}</div>
+                              {buyerEmail && <div className="text-xs text-[#713F12] flex items-center gap-1"><Mail className="w-3 h-3" />{buyerEmail}</div>}
+                              {buyerPhone && <div className="text-xs text-[#713F12]">📞 {buyerPhone}</div>}
+                            </div>
+                          </div>
+
+                          {/* Delivery Address */}
+                          {addressStr && (
+                            <div className="flex items-start gap-2 p-3 bg-white rounded-xl border border-[#FDE047]">
+                              <MapPin className="w-4 h-4 text-[#CA8A04] shrink-0 mt-0.5" />
+                              <div>
+                                <div className="text-[10px] font-bold uppercase tracking-wider text-[#713F12] mb-0.5">Delivery Address</div>
+                                <div className="text-xs text-[#0A0A0A]">{addressStr}</div>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Action Buttons */}
+                          <div className="flex flex-wrap items-center gap-2 pt-1">
+                            {/* Approve Order - only when pending */}
+                            {isPending && (
+                              <button
+                                disabled={isLoading}
+                                onClick={async () => {
+                                  setOrderActionLoading(orderId);
+                                  await approveOrder(orderId);
+                                  const ordersRes = await api.getAdminOrders();
+                                  if (ordersRes.success) setDbOrders(ordersRes.data);
+                                  setOrderActionLoading(null);
+                                }}
+                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#10B981] text-white text-xs font-bold hover:bg-[#059669] disabled:opacity-60 transition-all"
+                              >
+                                <CheckCircle2 className="w-4 h-4" />
+                                {isLoading ? 'Approving...' : 'Approve Order'}
+                              </button>
+                            )}
+
+                            {/* Dispatch - only when approved */}
+                            {isApproved && (
+                              <button
+                                disabled={isLoading}
+                                onClick={async () => {
+                                  setOrderActionLoading(orderId);
+                                  await dispatchOrder(orderId);
+                                  const ordersRes = await api.getAdminOrders();
+                                  if (ordersRes.success) setDbOrders(ordersRes.data);
+                                  setOrderActionLoading(null);
+                                }}
+                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#7C3AED] text-white text-xs font-bold hover:bg-[#6D28D9] disabled:opacity-60 transition-all"
+                              >
+                                <TrendingUp className="w-4 h-4" />
+                                {isLoading ? 'Dispatching...' : 'Dispatch (Send to Buyer)'}
+                              </button>
+                            )}
+
+                            {/* Approve Payment - shown when payment not yet PAID/REFUNDED */}
+                            {paymentStatus !== 'PAID' && paymentStatus !== 'REFUNDED' && status !== 'CANCELLED' && (
+                              <button
+                                disabled={isLoading}
+                                onClick={async () => {
+                                  setOrderActionLoading(orderId);
+                                  try {
+                                    await api.approveOrderPayment(orderId);
+                                    const ordersRes = await api.getAdminOrders();
+                                    if (ordersRes.success) setDbOrders(ordersRes.data);
+                                    addNotification(`💳 Payment approved for order #${orderId.slice(-6)} ✅`);
+                                  } catch (e) { console.warn(e); }
+                                  setOrderActionLoading(null);
+                                }}
+                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#0EA5E9] text-white text-xs font-bold hover:bg-[#0284C7] disabled:opacity-60 transition-all"
+                              >
+                                <ShoppingBag className="w-4 h-4" />
+                                {isLoading ? 'Processing...' : '💳 Approve Payment'}
+                              </button>
+                            )}
+
+                            {/* Reject Order - with reason modal */}
+                            {(isPending || isApproved) && (
+                              <button
+                                disabled={isLoading}
+                                onClick={() => {
+                                  setRejectReason('');
+                                  setRejectOrderModal({ id: orderId, dogName, isCancelOnly: false } as any);
+                                }}
+                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#D64545] text-white text-xs font-bold hover:bg-[#B91C1C] disabled:opacity-60 transition-all"
+                              >
+                                <AlertCircle className="w-4 h-4" />
+                                Reject Order
+                              </button>
+                            )}
+
+                            {/* Cancel Order - immediate cancel for any active order */}
+                            {status !== 'CANCELLED' && status !== 'DELIVERED' && (
+                              <button
+                                disabled={isLoading}
+                                onClick={() => {
+                                  setRejectReason('');
+                                  setRejectOrderModal({ id: orderId, dogName, isCancelOnly: true } as any);
+                                }}
+                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#F59E0B] text-white text-xs font-bold hover:bg-[#D97706] disabled:opacity-60 transition-all"
+                              >
+                                <X className="w-4 h-4" />
+                                Cancel Order
+                              </button>
+                            )}
+                          </div>
+
+                          <div className="text-[10px] text-[#713F12] font-mono pt-1">Order ID: {orderId}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Reject Reason Modal */}
+                {rejectOrderModal && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+                    <div className="bg-white rounded-2xl border border-[#FDE047] shadow-2xl w-full max-w-sm p-6 space-y-4">
+                      <h3 className="font-bold text-[#0A0A0A] text-base">Reject Order for "{rejectOrderModal.dogName}"</h3>
+                      <p className="text-xs text-[#713F12]">Please provide a reason for rejection. The buyer will be notified.</p>
+                      <textarea
+                        value={rejectReason}
+                        onChange={(e) => setRejectReason(e.target.value)}
+                        placeholder="e.g. Documentation incomplete, Payment verification failed..."
+                        rows={3}
+                        className="w-full border border-[#FDE047] rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#EAB308]"
+                      />
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setRejectOrderModal(null)}
+                          className="flex-1 px-4 py-2 rounded-xl border border-[#FDE047] text-xs font-bold text-[#713F12] hover:bg-[#FEF08A]"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          disabled={orderActionLoading === rejectOrderModal.id}
+                          onClick={async () => {
+                            const { id } = rejectOrderModal;
+                            setOrderActionLoading(id);
+                            setRejectOrderModal(null);
+                            await rejectOrder(id, rejectReason || 'Documentation or verification check failed');
+                            const ordersRes = await api.getAdminOrders();
+                            if (ordersRes.success) setDbOrders(ordersRes.data);
+                            setOrderActionLoading(null);
+                          }}
+                          className="flex-1 px-4 py-2 rounded-xl bg-[#D64545] text-white text-xs font-bold hover:bg-[#B91C1C] disabled:opacity-60"
+                        >
+                          Confirm Reject
+                        </button>
+                      </div>
                     </div>
                   </div>
-                ))}
+                )}
+
               </div>
-            </div>
-          )}
+            );
+          })()}
 
           {/* TAB 5: DOG SHOW EVENT MANAGEMENT (ADMIN ONLY) */}
           {activeAdminTab === 'shows' && (

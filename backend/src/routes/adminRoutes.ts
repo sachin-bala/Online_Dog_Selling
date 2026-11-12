@@ -17,6 +17,8 @@ import {
   approveDogOrder,
   dispatchDogOrder,
   rejectDogOrder,
+  approveOrderPayment,
+  cancelDogOrder,
 } from '../controllers/adminController.js';
 import { loginAdmin, registerAdmin } from '../controllers/authController.js';
 import { authenticateAdmin } from '../middleware/authMiddleware.js';
@@ -54,6 +56,8 @@ router.post('/dogs/:dogId/reject', requireRole('ADMIN', 'SUPER_ADMIN'), rejectDo
 router.post('/orders/:orderId/approve', requireRole('ADMIN', 'SUPER_ADMIN'), approveDogOrder);
 router.post('/orders/:orderId/dispatch', requireRole('ADMIN', 'SUPER_ADMIN'), dispatchDogOrder);
 router.post('/orders/:orderId/reject', requireRole('ADMIN', 'SUPER_ADMIN'), rejectDogOrder);
+router.post('/orders/:orderId/approve-payment', requireRole('ADMIN', 'SUPER_ADMIN'), approveOrderPayment);
+router.post('/orders/:orderId/cancel', requireRole('ADMIN', 'SUPER_ADMIN'), cancelDogOrder);
 
 router.put('/users/:userId/status', requireSuperAdmin, updateUserStatus);
 
