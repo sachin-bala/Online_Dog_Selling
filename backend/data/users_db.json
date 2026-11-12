@@ -1,14 +1,14 @@
 [
   {
-    "id": "6ab3bd266a30440a1194447f",
-    "_id": "6ab3bd266a30440a1194447f",
+    "id": "6af54c132a69c8ae64e92160",
+    "_id": "6af54c132a69c8ae64e92160",
     "fullName": "PawVerse AI Super Admin",
     "email": "admin@gmail.com",
-    "password": "$2b$10$qTqnKdfkSoZoTrzupmumaO2bDmROqVrCZOIhIJL15MdetH5qUUMEi",
+    "password": "$2b$10$mIR.sVKdYSTM0eBsEkED/egUIfrOn1GHOEVmjDVhW6EcXn4FsiK6W",
     "role": "SUPER_ADMIN",
     "accountStatus": "ACTIVE",
     "emailVerified": true,
-    "createdAt": "2026-09-23T11:51:02.124Z"
+    "createdAt": "2026-11-12T05:18:11.918Z"
   },
   {
     "id": "6ab20dd040ac0839c037f2bf",
