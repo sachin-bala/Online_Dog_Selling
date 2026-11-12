@@ -16,6 +16,7 @@ dist-ssr
 !.env.example
 backend/dist
 backend/node_modules
+backend/mongodata/
 
 # Editor directories and files
 .vscode/*

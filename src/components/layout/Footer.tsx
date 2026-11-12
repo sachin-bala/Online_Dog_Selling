@@ -98,15 +98,15 @@ export const Footer: React.FC = () => {
           <div className="space-y-2 pt-2 text-xs">
             <div className="flex items-center gap-2 text-white/80">
               <Phone className="w-4 h-4 text-[#FACC15] shrink-0" />
-              <span>Helpline: <strong className="text-white">+91 87796 92292</strong> (9 AM - 8 PM IST)</span>
+              <span>Helpline: <strong className="text-white">+91 9360359575</strong> (9 AM - 8 PM IST)</span>
             </div>
             <div className="flex items-center gap-2 text-white/80">
               <Mail className="w-4 h-4 text-[#FACC15] shrink-0" />
-              <span>Email: <strong className="text-white">support@pawverse.in</strong></span>
+              <span>Email: <strong className="text-white">nateshnatesh047@gmail.com</strong></span>
             </div>
             <div className="flex items-center gap-2 text-white/80">
               <MapPin className="w-4 h-4 text-[#FACC15] shrink-0" />
-              <span>Headquarters: Chennai & Rajapalayam, Tamil Nadu</span>
+              <span>Headquarters: <strong className="text-white">Allinagaram,Theni,Tamil Nadu</strong> </span>
             </div>
           </div>
         </div>

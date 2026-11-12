@@ -204,7 +204,21 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<'dark' | 'light'>('light');
   const [activeTab, setActiveTab] = useState<'home' | 'explore' | 'ai-finder' | 'shows' | 'seller' | 'admin' | 'customer' | 'store'>('home');
-  const [dogs, setDogs] = useState<Dog[]>(INITIAL_DOGS);
+  const [dogs, setDogs] = useState<Dog[]>(() => {
+    try {
+      const saved = localStorage.getItem('pawverse_custom_dogs');
+      if (saved) {
+        const customDogs: Dog[] = JSON.parse(saved);
+        const map = new Map<string, Dog>();
+        INITIAL_DOGS.forEach((d: Dog) => map.set(d.id, d));
+        customDogs.forEach((d: Dog) => map.set(d.id, d));
+        return Array.from(map.values());
+      }
+    } catch (e) {
+      console.warn('Failed to parse pawverse_custom_dogs from localStorage:', e);
+    }
+    return INITIAL_DOGS;
+  });
   const [selectedDog, setSelectedDog] = useState<Dog | null>(null);
 
   // Auth User State
@@ -330,6 +344,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setDogs(() => {
           const map = new Map<string, Dog>();
           INITIAL_DOGS.forEach((d: Dog) => map.set(d.id, d));
+          try {
+            const saved = localStorage.getItem('pawverse_custom_dogs');
+            if (saved) {
+              const customDogs: Dog[] = JSON.parse(saved);
+              customDogs.forEach((d: Dog) => map.set(d.id, d));
+            }
+          } catch {}
           fetchedDogs.forEach((d: Dog) => map.set(d.id, d));
           return Array.from(map.values());
         });
@@ -940,7 +961,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } catch {
       const approvedDog = pendingListings.find(d => d.id === dogId);
       if (approvedDog) {
-        setDogs(prev => [approvedDog, ...prev]);
+        setDogs(prev => {
+          const updated = [approvedDog, ...prev];
+          try {
+            const existingCustom = JSON.parse(localStorage.getItem('pawverse_custom_dogs') || '[]');
+            const mergedCustom = [approvedDog, ...existingCustom.filter((d: any) => (d.id || d._id) !== dogId)];
+            localStorage.setItem('pawverse_custom_dogs', JSON.stringify(mergedCustom));
+          } catch {}
+          return updated;
+        });
         setPendingListings(prev => prev.filter(d => d.id !== dogId));
       }
       addNotification(`Listing APPROVED & published live! 🐾`);

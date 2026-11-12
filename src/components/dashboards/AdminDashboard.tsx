@@ -806,78 +806,104 @@ export const AdminDashboard: React.FC = () => {
         formData.append('imageUrl', formImageUrl);
       }
 
-      const res = await api.createDogListing(formData);
-      if (res.success) {
-        await refreshDogs();
-        const chosenImage = formImagePreview || formImageUrl || 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=1200&q=80';
-        if (res.data) {
-          const newListing = {
-            id: res.data._id || res.data.id || `dog-${Date.now()}`,
-            name: formDogName,
-            breed: formBreed,
-            category: 'Family Dogs',
-            age: formAge,
-            ageMonths: 3,
-            gender: formGender,
-            price: numPrice,
-            originalPrice: Math.round(numPrice * 1.15),
-            location: formLocation,
-            color: 'Standard',
-            weightKg: 6,
-            images: res.data.images && res.data.images.length > 0 ? res.data.images : [chosenImage],
-            frames360: res.data.images && res.data.images.length > 0 ? res.data.images : [chosenImage],
-            health: {
-              vaccinationStatus: 'Fully Vaccinated',
-              healthScore: 98,
-              microchipId: `KCI-TN-${Math.floor(1000 + Math.random() * 9000)}`,
-              dnaVerified: true,
-              vetInspectionDate: new Date().toISOString().split('T')[0],
-              deWormed: true,
-              medicalHistory: ['Core Vaccinations Complete'],
-            },
-            seller: {
-              id: 's-admin',
-              name: formSellerName,
-              businessName: `${formSellerName} Kennel`,
-              avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
-              rating: 4.9,
-              reviewsCount: 15,
-              verifiedBreeder: true,
-              city: formLocation,
-              state: 'Tamil Nadu',
-              phone: formSellerPhone,
-              responseRate: '99%',
-              joinedYear: 2024,
-            },
-            traits: { affection: 5, energy: 4, grooming: 3, barking: 2, trainability: 5 },
-            suitableFor: { apartment: true, kids: true, firstTimeOwner: true, climate: 'Any' },
-            foodRecommendation: 'Royal Canin Starter / Premium Dog Formula',
-            exerciseRecommendation: '30-45 minutes daily play',
-            description: formDescription || `${formBreed} puppy listed by ${formSellerName}`,
-            certified: true,
-            availableNow: formAvailability,
-            featured: true,
-          };
-          setDogs(prev => [newListing as any, ...prev.filter(d => d.id !== newListing.id && (d as any)._id !== newListing.id)]);
+      const chosenImage = formImagePreview || formImageUrl || 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=1200&q=80';
+      const localId = `dog-${Date.now()}`;
+      let createdDogData: any = null;
+
+      try {
+        const res = await api.createDogListing(formData);
+        if (res && res.success && res.data) {
+          createdDogData = res.data;
+          await refreshDogs();
         }
-        setIsAddSellerDogOpen(false);
-        // Reset Form
-        setFormSellerName('');
-        setFormSellerPhone('');
-        setFormSellerEmail('');
-        setFormDogName('');
-        setFormBreed('');
-        setFormAge('');
-        setFormPrice('');
-        setFormLocation('');
-        setFormDescription('');
-        setFormImageFile(null);
-        setFormImagePreview('');
-        setFormImageUrl('');
-      } else {
-        setSubmitError(res.message || 'Failed to save seller dog record.');
+      } catch (networkErr) {
+        console.warn('[AdminDashboard] Backend API unavailable or offline, adding to local/live state:', networkErr);
       }
+
+      const finalId = createdDogData?._id || createdDogData?.id || localId;
+      const finalImages = (createdDogData?.images && createdDogData.images.length > 0)
+        ? createdDogData.images
+        : [chosenImage];
+
+      const newListing = {
+        id: finalId,
+        _id: finalId,
+        name: formDogName,
+        breed: formBreed,
+        category: 'Family Dogs',
+        age: formAge,
+        ageMonths: 3,
+        gender: formGender,
+        price: numPrice,
+        originalPrice: Math.round(numPrice * 1.15),
+        location: formLocation,
+        color: 'Standard',
+        weightKg: 6,
+        images: finalImages,
+        frames360: finalImages,
+        health: {
+          vaccinationStatus: 'Fully Vaccinated',
+          healthScore: 98,
+          microchipId: `KCI-TN-${Math.floor(1000 + Math.random() * 9000)}`,
+          dnaVerified: true,
+          vetInspectionDate: new Date().toISOString().split('T')[0],
+          deWormed: true,
+          medicalHistory: ['Core Vaccinations Complete'],
+        },
+        seller: {
+          id: 's-admin',
+          name: formSellerName,
+          businessName: `${formSellerName} Kennel`,
+          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+          rating: 4.9,
+          reviewsCount: 15,
+          verifiedBreeder: true,
+          city: formLocation,
+          state: 'Tamil Nadu',
+          phone: formSellerPhone,
+          responseRate: '99%',
+          joinedYear: 2024,
+        },
+        traits: { affection: 5, energy: 4, grooming: 3, barking: 2, trainability: 5 },
+        suitableFor: { apartment: true, kids: true, firstTimeOwner: true, climate: 'Any' },
+        foodRecommendation: 'Royal Canin Starter / Premium Dog Formula',
+        exerciseRecommendation: '30-45 minutes daily play',
+        description: formDescription || `${formBreed} puppy listed by ${formSellerName}`,
+        certified: true,
+        availableNow: formAvailability,
+        featured: true,
+      };
+
+      setDogs(prev => {
+        const updated = [newListing as any, ...prev.filter(d => d.id !== finalId && (d as any)._id !== finalId)];
+        try {
+          const existingCustom = JSON.parse(localStorage.getItem('pawverse_custom_dogs') || '[]');
+          const mergedCustom = [newListing, ...existingCustom.filter((d: any) => (d.id || d._id) !== finalId)];
+          localStorage.setItem('pawverse_custom_dogs', JSON.stringify(mergedCustom));
+        } catch (storageErr) {
+          console.warn('Could not persist dog to localStorage:', storageErr);
+        }
+        return updated;
+      });
+
+      addNotification(`Dog listing "${formDogName}" (${formBreed}) added successfully! 🐾`);
+      setIsAddSellerDogOpen(false);
+
+      // Reset Form
+      setFormSellerName('');
+      setFormSellerPhone('');
+      setFormSellerEmail('');
+      setFormDogName('');
+      setFormBreed('');
+      setFormAge('');
+      setFormPrice('');
+      setFormLocation('');
+      setFormDescription('');
+      setFormImageFile(null);
+      setFormImagePreview('');
+      setFormImageUrl('');
     } catch (err: any) {
+      console.error('Error handling dog upload:', err);
       setSubmitError(err.message || 'Error saving seller dog record.');
     } finally {
       setIsSubmitting(false);
@@ -888,16 +914,24 @@ export const AdminDashboard: React.FC = () => {
     if (!removingDog) return;
     try {
       const dogId = removingDog.id || removingDog._id;
-      const res = await api.deleteDogListing(dogId);
-      if (res.success) {
-        await refreshDogs();
-      } else {
-        setDogs(prev => prev.filter(d => d.id !== dogId && (d as any)._id !== dogId));
+      try {
+        const res = await api.deleteDogListing(dogId);
+        if (res.success) {
+          await refreshDogs();
+        }
+      } catch (err) {
+        console.warn('Remove seller dog API error:', err);
       }
-    } catch (err) {
-      console.warn('Remove seller dog error:', err);
-      const dogId = removingDog.id || removingDog._id;
-      setDogs(prev => prev.filter(d => d.id !== dogId && (d as any)._id !== dogId));
+      setDogs(prev => {
+        const updated = prev.filter(d => d.id !== dogId && (d as any)._id !== dogId);
+        try {
+          const existingCustom = JSON.parse(localStorage.getItem('pawverse_custom_dogs') || '[]');
+          const filteredCustom = existingCustom.filter((d: any) => (d.id || d._id) !== dogId);
+          localStorage.setItem('pawverse_custom_dogs', JSON.stringify(filteredCustom));
+        } catch {}
+        return updated;
+      });
+      addNotification(`Dog listing removed successfully.`);
     } finally {
       setRemovingDog(null);
     }

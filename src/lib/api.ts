@@ -346,29 +346,44 @@ export const api = {
   },
 
   createDogListing: async (formData: FormData) => {
-    const res = await fetch(`${API_BASE_URL}/dogs`, {
-      method: 'POST',
-      headers: { ...getAuthHeader() },
-      body: formData,
-    });
-    return handleResponse(res);
+    try {
+      const res = await fetch(`${API_BASE_URL}/dogs`, {
+        method: 'POST',
+        headers: { ...getAuthHeader() },
+        body: formData,
+      });
+      return await handleResponse(res);
+    } catch (err: any) {
+      console.warn('[PAWVERSE API] createDogListing offline/failed:', err?.message);
+      return { success: false, message: err?.message || 'Network error' };
+    }
   },
 
   updateDogListing: async (id: string, dogData: any) => {
-    const res = await fetch(`${API_BASE_URL}/dogs/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
-      body: JSON.stringify(dogData),
-    });
-    return handleResponse(res);
+    try {
+      const res = await fetch(`${API_BASE_URL}/dogs/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
+        body: JSON.stringify(dogData),
+      });
+      return await handleResponse(res);
+    } catch (err: any) {
+      console.warn('[PAWVERSE API] updateDogListing offline/failed:', err?.message);
+      return { success: false, message: err?.message || 'Network error' };
+    }
   },
 
   deleteDogListing: async (id: string) => {
-    const res = await fetch(`${API_BASE_URL}/dogs/${id}`, {
-      method: 'DELETE',
-      headers: { ...getAuthHeader() },
-    });
-    return handleResponse(res);
+    try {
+      const res = await fetch(`${API_BASE_URL}/dogs/${id}`, {
+        method: 'DELETE',
+        headers: { ...getAuthHeader() },
+      });
+      return await handleResponse(res);
+    } catch (err: any) {
+      console.warn('[PAWVERSE API] deleteDogListing offline/failed:', err?.message);
+      return { success: false, message: err?.message || 'Network error' };
+    }
   },
 
   // Payments & Orders
